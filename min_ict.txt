@@ -1,0 +1,47 @@
+##ICT
+import win32com.client as wc #윈도우 리소스 컨트롤 모듈
+
+excel = wc.Dispatch("Excel.Application") #엑셀 접근
+
+
+#엑셀파일 오픈 & 시트 활성화
+ex1=excel.Workbooks.Open(r'C:\Users\uidk3482\Documents\데일리.xlsx')
+ws1= ex1.ActiveSheet
+ex2=excel.Workbooks.Open(r'C:\Users\uidk3482\Documents\ICT내용만.xlsx')
+ws2= ex2.ActiveSheet
+
+#엑셀파일의 셀 내용을 받을 리스트 변수(리스트화 하는 이유->동작이 20배 더 빠름)
+troubles=[]
+ICT=[]
+
+
+#리스트 길이
+listlength=101
+
+
+#셀내용들 리스트화
+for i in range(1,listlength):
+    
+    if type(ws1.Cells(i,7).Value) is str:
+        troubles=troubles + [ws1.Cells(i,7).Value]
+    
+    else:
+        troubles=troubles + ['?']
+        
+#ICT있는지 조사        
+for num, trouble in enumerate(troubles):
+    if 'ICT' in trouble:
+        ICT=ICT+[ws1.Cells(num+1,1),ws1.Cells(num+1,2),ws1.Cells(num+1,3),ws1.Cells(num+1,4),ws1.Cells(num+1,5),ws1.Cells(num+1,6),ws1.Cells(num+1,7),ws1.Cells(num+1,8)]
+        print(trouble)
+#적기
+row=1
+for column, cont in enumerate(ICT):
+    ws2.Cells(row,column+1).Value=cont
+    if (column+1)%8 == 0:
+        row=row+1
+    
+
+#저장 및 종료            
+ex2.Save()
+excel.Quit()
+print("Done")
